@@ -2,16 +2,16 @@ version: "3.4"
 
 services:
   whisper-asr-webservice:
+    # Можно использовать готовый образ вместо сборки:
+    # image: onerahmet/openai-whisper-asr-webservice:latest
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ASR_MODEL=base
+      - ASR_MODEL=base         # Модель Whisper (tiny, base, small, medium, large)
+      - ASR_ENGINE=openai_whisper  # Движок распознавания (если поддерживается)
+      # Опционально:
+      - WHISPER_CACHE_DIR=/tmp/whisper-cache  # Альтернативный путь для кэша (если /root/.cache недоступен)
+      - NUM_WORKERS=2          # Количество воркеров (по умолчанию 1)
     ports:
-      - "9000:9000"
-    volumes:
-      - ./app:/app/app
-      - cache-whisper:/root/.cache
-
-volumes:
-  cache-whisper:
+      - "9000:9000"            # Порт веб-сервиса
